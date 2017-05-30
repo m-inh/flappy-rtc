@@ -15,7 +15,7 @@
  limitations under the License.
  */
 
-var debugmode = false;
+var debugmode = true;
 
 var states = Object.freeze({
     SplashScreen: 0,
@@ -37,7 +37,7 @@ var highscore = 0;
 
 var pipeheight = 90;
 var pipewidth = 52;
-var pipes = new Array();
+var pipes = [];
 
 var replayclickable = false;
 
@@ -55,14 +55,14 @@ var loopGameloop;
 var loopPipeloop;
 
 $(document).ready(function () {
-    if (window.location.search == "?debug")
+    if (window.location.search === "?debug")
         debugmode = true;
-    if (window.location.search == "?easy")
+    if (window.location.search === "?easy")
         pipeheight = 200;
 
     //get the highscore
     var savedscore = getCookie("highscore");
-    if (savedscore != "")
+    if (savedscore !== "")
         highscore = parseInt(savedscore);
 
     //start with the splash screen
@@ -74,7 +74,7 @@ function getCookie(cname) {
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i].trim();
-        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
     }
     return "";
 }
@@ -190,7 +190,7 @@ function gameloop() {
         position = 0;
 
     //we can't go any further without a pipe
-    if (pipes[0] == null)
+    if (pipes[0] === null)
         return;
 
     //determine the bounding box of the next pipes inner area
@@ -238,9 +238,9 @@ function gameloop() {
 //Handle space bar
 $(document).keydown(function (e) {
     //space bar!
-    if (e.keyCode == 32) {
+    if (e.keyCode === 32) {
         //in ScoreScreen, hitting space should click the "replay" button. else it's just a regular spacebar hit
-        if (currentstate == states.ScoreScreen)
+        if (currentstate === states.ScoreScreen)
             $("#replay").click();
         else
             screenClick();
@@ -254,10 +254,10 @@ else
     $(document).on("mousedown", screenClick);
 
 function screenClick() {
-    if (currentstate == states.GameScreen) {
+    if (currentstate === states.GameScreen) {
         playerJump();
     }
-    else if (currentstate == states.SplashScreen) {
+    else if (currentstate === states.SplashScreen) {
         startGame();
     }
 }
@@ -433,7 +433,7 @@ function updatePipes() {
     //Do any pipes need removal?
     $(".pipe").filter(function () {
         return $(this).position().left <= -100;
-    }).remove()
+    }).remove();
 
     //add a new pipe (top height + bottom height  + pipeheight == flyArea) and put it in our tracker
     var padding = 80;
@@ -442,6 +442,9 @@ function updatePipes() {
     var bottomheight = (flyArea - pipeheight) - topheight;
     var newpipe = $('<div class="pipe animated"><div class="pipe_upper" style="height: ' + topheight + 'px;"></div><div class="pipe_lower" style="height: ' + bottomheight + 'px;"></div></div>');
     $("#flyarea").append(newpipe);
+
+    console.log('topheight', topheight);
+    console.log('bottomheight', bottomheight);
     pipes.push(newpipe);
 }
 
