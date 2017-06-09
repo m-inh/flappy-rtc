@@ -47,8 +47,7 @@ $(document).ready(function () {
 
     //get the highscore
     let savedscore = getCookie("highscore");
-    if (savedscore !== "")
-        highscore = parseInt(savedscore);
+    if (savedscore !== "") highscore = parseInt(savedscore);
 
     //start with the splash screen
     showSplash();
@@ -292,7 +291,7 @@ function setMedal() {
 
     let medal;
 
-    if (score < 10){
+    if (score < 10) {
         //signal that no medal has been won
         return false;
     }
