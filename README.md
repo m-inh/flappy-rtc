@@ -1,3 +1,3 @@
-Flappy bird RTC
+#Flappy bird RTC
 
-Playing flappy bird with friend
+Enjoy flappy bird with friend ;)

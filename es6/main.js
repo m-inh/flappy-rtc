@@ -1,20 +1,3 @@
-/*
- Copyright 2014 Nebez Briefkani
- floppybird - main.js
-
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- */
-
 var debugmode = true;
 
 var states = Object.freeze({
@@ -104,7 +87,7 @@ function showSplash() {
 
     //clear out all the pipes if there are any
     $(".pipe").remove();
-    pipes = new Array();
+    pipes = [];
 
     //make everything animated again
     $(".animated").css('animation-play-state', 'running');
@@ -148,6 +131,8 @@ function updatePlayer(player) {
 }
 
 function gameloop() {
+    console.log('game loop');
+    console.log('velocity', velocity);
     var player = $("#player");
 
     //update the player speed/position
@@ -190,7 +175,7 @@ function gameloop() {
         position = 0;
 
     //we can't go any further without a pipe
-    if (pipes[0] === null)
+    if (!pipes[0])
         return;
 
     //determine the bounding box of the next pipes inner area
@@ -430,6 +415,7 @@ function playerScore() {
 }
 
 function updatePipes() {
+    console.log('updatePipes');
     //Do any pipes need removal?
     $(".pipe").filter(function () {
         return $(this).position().left <= -100;
