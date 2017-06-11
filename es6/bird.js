@@ -2,7 +2,7 @@
 
 class Bird {
 
-    constructor(velocity, jump, score){
+    constructor(velocity, jump, score) {
 
     }
 }

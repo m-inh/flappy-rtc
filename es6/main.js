@@ -2,11 +2,11 @@
 
 let debugmode = true;
 
-let states = Object.freeze({
+const states = {
     SplashScreen: 0,
     GameScreen: 1,
     ScoreScreen: 2
-});
+};
 
 let currentstate;
 
@@ -44,6 +44,45 @@ $(document).ready(function () {
         debugmode = true;
     if (window.location.search === "?easy")
         pipeheight = 200;
+
+    //Handle space bar
+    $(document).keydown(function (e) {
+        //space bar!
+        if (e.keyCode === 32) {
+            //in ScoreScreen, hitting space should click the "replay" button. else it's just a regular spacebar hit
+            if (currentstate === states.ScoreScreen)
+                $("#replay").click();
+            else
+                screenClick();
+        }
+    });
+
+    //Handle mouse down OR touch start
+    if ("ontouchstart" in window)
+        $(document).on("touchstart", screenClick);
+    else
+        $(document).on("mousedown", screenClick);
+
+    $("#replay").click(function () {
+        //make sure we can only click once
+        if (!replayclickable)
+            return;
+        else
+            replayclickable = false;
+        //SWOOSH!
+        soundSwoosh.stop();
+        soundSwoosh.play();
+
+        //fade out the scoreboard
+        $("#scoreboard").transition({y: '-40px', opacity: 0}, 1000, 'ease', function () {
+            //when that's done, display us back to nothing
+            $("#scoreboard").css("display", "none");
+
+            //start the game over!
+            showSplash();
+        });
+    });
+
 
     //get the highscore
     let savedscore = getCookie("highscore");
@@ -221,24 +260,6 @@ function gameloop() {
     }
 }
 
-//Handle space bar
-$(document).keydown(function (e) {
-    //space bar!
-    if (e.keyCode === 32) {
-        //in ScoreScreen, hitting space should click the "replay" button. else it's just a regular spacebar hit
-        if (currentstate === states.ScoreScreen)
-            $("#replay").click();
-        else
-            screenClick();
-    }
-});
-
-//Handle mouse down OR touch start
-if ("ontouchstart" in window)
-    $(document).on("touchstart", screenClick);
-else
-    $(document).on("mousedown", screenClick);
-
 function screenClick() {
     if (currentstate === states.GameScreen) {
         playerJump();
@@ -389,26 +410,6 @@ function showScore() {
     //make the replay button clickable
     replayclickable = true;
 }
-
-$("#replay").click(function () {
-    //make sure we can only click once
-    if (!replayclickable)
-        return;
-    else
-        replayclickable = false;
-    //SWOOSH!
-    soundSwoosh.stop();
-    soundSwoosh.play();
-
-    //fade out the scoreboard
-    $("#scoreboard").transition({y: '-40px', opacity: 0}, 1000, 'ease', function () {
-        //when that's done, display us back to nothing
-        $("#scoreboard").css("display", "none");
-
-        //start the game over!
-        showSplash();
-    });
-});
 
 function playerScore() {
     score += 1;
